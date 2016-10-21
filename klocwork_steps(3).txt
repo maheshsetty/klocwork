@@ -1,0 +1,47 @@
+open visual studio command line:
+"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\VsMSBuildCmd.bat"
+
+Klocwork Static code analysis tools
+
+- authenticate klocwork user
+kwauth --url http://192.168.9.253:8080/
+
+For Klocwork
+User ID:kw_pes_isv_1
+Password: isvpes1
+
+
+- create config file
+
+kwcheck create --url http://192.168.9.253:8080/BEL_VMS
+
+- open klocwork shell
+
+kwshell -pd .kwlp
+
+- In klocwork shell:
+
+make clean
+make
+
+or
+
+msbuild Motion_Detection.vcxproj /t:clean /property:Configuration=Release /p:Platform="x64"
+msbuild Motion_Detection.vcxproj /t:build /property:Configuration=Release /p:Platform="x64"
+
+replace(in above coomand) with your respective project name inplace of "Motion_Detection"
+
+kwcheck set license.host=192.168.9.253 license.port=27000
+kwcheck run -pd .kwlp
+
+kwcheck list -pd .kwlp -y
+
+#Generate report in .txt
+kwcheck list -pd .kwlp -y >klocwork_result.txt
+
+kwcheck list -pd .kwlp -y -F xml >klocwork_result.xml
+- exit from klocwork shell
+
+exit
+upload the same report to sonar cube.
+run the sonarcube script where this report is generated
